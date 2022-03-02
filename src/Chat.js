@@ -1,5 +1,8 @@
 import { Component } from "react";
+
 // import './Chat.css';
+const client = new WebSocket('ws://localhost:8080/chat');
+
 
 class Chat extends Component {
 
@@ -8,9 +11,26 @@ class Chat extends Component {
         this.state = {message: ''};
     }
 
-    sendMessage = () => {
+    componentWillMount () {
 
-        alert(this.state.message);
+        client.onopen = () => {
+            console.log('WebSocket Client Connected');
+        };
+
+        client.onmessage = (message) => {
+            console.log(message);
+        };
+
+        client.onclose = () => {
+            console.log('WebSocket Connection Closed');
+        }
+
+    }
+
+    sendMessage = (message) => {
+
+        //alert(this.state.message);
+        client.send(message)
     }
 
     handleChange = (e) => {

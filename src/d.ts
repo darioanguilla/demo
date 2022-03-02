@@ -1,0 +1,1 @@
+declare module 'websocket/lib/W3CWebSocket';
