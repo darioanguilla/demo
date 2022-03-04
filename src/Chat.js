@@ -6,13 +6,27 @@ const client = new WebSocket('ws://localhost:8080/chat');
 
 class Chat extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {message: ''};
         this.state = {messages: []};
     }
 
-    componentWillMount () {
+    sendMessage = () => {
+
+        //alert(this.state.message);
+        client.send(this.state.message)
+        this.setState({message: ''});
+    }
+
+    handleChange = (e) => {
+        this.setState(            
+            {message: e.target.value}
+        );
+
+    }
+
+    componentDidMount () {
 
         client.onopen = () => {
             console.log('WebSocket Client Connected');
@@ -32,29 +46,32 @@ class Chat extends Component {
 
     }
 
-    sendMessage = (message) => {
-
-        //alert(this.state.message);
-        client.send(message)
-    }
-
-    handleChange = (e) => {
-        this.setState(            
-            {message: e.target.value}
-        );
-
-    }
-
     render() {
         return (
             <div>
-                <h2>Chat realizzata con React e WebSockets</h2>
-                <input onChange={this.handleChange.bind(this)}>
-                </input>
-                <button onClick={() => this.sendMessage(this.state.message)}>
-                    Send Message
-                </button>
-            </div>
+        <h2>Chat realizzata con React e Websockets</h2>
+        <div className="chatbox">
+          <div id="messages" className="messages">
+            {this.state.messages.map((message) => {
+              return (
+                <div className="message-text" key={message.id}>
+                  {message.text}
+                </div>
+              );
+            })}
+          </div>
+          <div className="message-input">
+            <input
+              placeholder="Message..."
+              onChange={this.handleChange.bind(this)}
+              value={this.state.message || ''}
+            />
+            <button onClick={() => this.sendMessage()}>
+              Send message
+            </button>
+          </div>
+        </div>
+      </div>
         )
     }
 }
