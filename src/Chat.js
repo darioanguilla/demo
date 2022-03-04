@@ -1,7 +1,7 @@
 import { Component } from "react";
 
 // import './Chat.css';
-const client = new WebSocket('ws://localhost:8080/chat');
+const client = new WebSocket('ws://chat-server-spring.herokuapp.com/chat');
 
 
 class Chat extends Component {
@@ -16,13 +16,13 @@ class Chat extends Component {
     sendMessage = () => {
 
         //alert(this.state.message);
-        client.send(this.state.message)
+        client.send('Dario ' + this.state.message)
         this.setState({message: ''});
     }
 
     handleChange = (e) => {
         this.setState(            
-            {message: e.target.value}
+            {message:e.target.value}
         );
 
     }
