@@ -9,6 +9,7 @@ class Chat extends Component {
     constructor(){
         super();
         this.state = {message: ''};
+        this.state = {messages: []};
     }
 
     componentWillMount () {
@@ -18,7 +19,11 @@ class Chat extends Component {
         };
 
         client.onmessage = (message) => {
-            console.log(message);
+            console.log(this.state.messages);
+            //console.log(message);
+            this.setState({
+                messages: [...this.state.messages, {id:this.state.messages.length,text: message.data}]
+            })
         };
 
         client.onclose = () => {
@@ -34,11 +39,8 @@ class Chat extends Component {
     }
 
     handleChange = (e) => {
-        const text = e.target.value;
-        
-        this.setState(
-            
-            {message: text}
+        this.setState(            
+            {message: e.target.value}
         );
 
     }
@@ -47,10 +49,9 @@ class Chat extends Component {
         return (
             <div>
                 <h2>Chat realizzata con React e WebSockets</h2>
-                <input onChange={this.handleChange.bind(this)}
-                       value={this.state.message}>
+                <input onChange={this.handleChange.bind(this)}>
                 </input>
-                <button onClick={() => this.sendMessage()}>
+                <button onClick={() => this.sendMessage(this.state.message)}>
                     Send Message
                 </button>
             </div>
