@@ -1,7 +1,7 @@
 import { Component } from "react";
 
 // import './Chat.css';
-const client = new WebSocket('ws://localhost:8080/chat');
+const client = new WebSocket('ws://192.168.10.88:8080/chat');
 
 
 class Chat extends Component {
@@ -55,7 +55,7 @@ class Chat extends Component {
             {this.state.messages.map((message) => {
               return (
                 <div className="message-text" key={message.id}>
-                  {message.text}
+                 {message.text}
                 </div>
               );
             })}
