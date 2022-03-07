@@ -1,44 +1,47 @@
 import { Component } from "react";
 
 // import './Chat.css';
-const client = new WebSocket('ws://chat-server-spring.herokuapp.com/chat');
+const client = new WebSocket('ws://localhost:8080/chat');
 
 
 class Chat extends Component {
 
     constructor(props){
-        super(props);
-        this.state = {message: '', user: 'Dario'};
-        this.state = {messages: []};
-        
+      super(props);
+      this.state = {message: '', user: ''};
+      this.state = {messages: []};
     }
 
     sendMessage = () => {
-
-        //alert(this.state.message);
-        client.send('Dario ' + this.state.message)
-        this.setState({message: ''});
+      const timestamp = Date.now()
+      const humanReadableDateTime = new Date(timestamp).toLocaleString()
+      let msg = {user: this.state.user, text: this.state.message, date: humanReadableDateTime};
+      client.send(JSON.stringify(msg));
+      this.setState({message: ''});
     }
 
     handleChange = (e) => {
-        this.setState(            
-            {message:e.target.value}
-        );
+      this.setState(            
+        {message: e.target.value}
+      );
 
     }
 
     componentDidMount () {
 
+        this.setState({user: 'Dario'});
+        this.setState({message: ''});
+
         client.onopen = () => {
-            console.log('WebSocket Client Connected');
+          console.log('WebSocket Client Connected');
         };
 
         client.onmessage = (message) => {
-            console.log(this.state.messages);
-            //console.log(message);
-            this.setState({
-                messages: [...this.state.messages, {id:this.state.messages.length,text: message.data}]
-            })
+          //console.log(this.state.messages);
+          //console.log(message);
+          this.setState({
+            messages: [...this.state.messages, {id:this.state.messages.length,payload: message.data}]
+          })
         };
 
         client.onclose = () => {
@@ -54,9 +57,10 @@ class Chat extends Component {
         <div className="chatbox">
           <div id="messages" className="messages">
             {this.state.messages.map((message) => {
+              const msg = JSON.parse(message.payload);
               return (
                 <div className="message-text" key={message.id}>
-                 {message.user} {message.text}
+                 {msg.user}: {msg.text} ({msg.date})
                 </div>
               );
             })}
