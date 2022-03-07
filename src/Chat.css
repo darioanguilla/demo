@@ -1,0 +1,10 @@
+.user {
+    color: red;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.date{
+    color: lime;
+    font-size: 50%;
+}

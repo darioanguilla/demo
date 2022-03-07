@@ -1,4 +1,5 @@
 import { Component } from "react";
+import "./Chat.css";
 
 // import './Chat.css';
 const client = new WebSocket('ws://localhost:8080/chat');
@@ -60,7 +61,7 @@ class Chat extends Component {
               const msg = JSON.parse(message.payload);
               return (
                 <div className="message-text" key={message.id}>
-                 {msg.user}: {msg.text} ({msg.date})
+                 <span class="user">{msg.user}</span>: <span class="text">{msg.text}</span> <span class="date">({msg.date})</span>
                 </div>
               );
             })}
